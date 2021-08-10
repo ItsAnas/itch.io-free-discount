@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>100% itch.io discount</h1>
+
+    <div id="games">
+    </div>
+
+    <button onclick="showMore()">Show more</button>
+
+</body>
+
+</html>
+
+<script async>
+    var items = []
+    var indexPage = 0;
+
+    function fetchAndShow(url) {
+        fetch(url).then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(response);
+            }
+        }).then(function (data) {
+            items = items.concat(data);
+        }).catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+        });
+    }
+
+    function showMore() {
+        for (var i = indexPage; i < indexPage + 10 && i < items.length; i++) {
+            var iframe = document.createElement('iframe');
+            iframe.src = "https://itch.io/embed/" + items[i].id
+            iframe.height = 167;
+            iframe.width = 552;
+            iframe.frameBorder = "0";
+
+            document.getElementById("games").appendChild(iframe);
+        }
+
+        console.log(items.length);
+        indexPage += 10;
+    }
+
+    fetchAndShow('https://run.mocky.io/v3/70173c69-dab5-4dd9-ad79-56b6fa44fdf8');
+    fetchAndShow('https://run.mocky.io/v3/2a0c2116-6f9d-4f0c-ae26-fe6e03f1c44c');
+    fetchAndShow('https://run.mocky.io/v3/c6bc5fd9-e7b5-41fe-993e-fd0c6915dc0e');
+
+</script>
